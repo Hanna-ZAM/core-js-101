@@ -555,8 +555,21 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  const numb = 0;
+  let result = '';
+  function flatArr(array, numbert, index) {
+    const ak = array[index[numbert]];
+
+    if (Array.isArray(ak)) {
+      const kr = numbert + 1;
+      flatArr(ak, kr, index);
+    } else {
+      result = ak;
+      return result;
+    }
+    return result;
+  } return flatArr(arr, numb, indexes);
 }
 
 
@@ -578,8 +591,19 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  let arr1;
+  const n = Math.floor(arr.length / 2);
+  const head = arr.slice(0, n);
+  const tail = arr.slice(-n);
+  if (arr.length === 1) {
+    arr1 = arr;
+  } else if (arr.length % 2 === 1) {
+    arr1 = [...tail, arr[n], ...head];
+  } else {
+    arr1 = [...tail, ...head];
+  }
+  return arr1;
 }
 
 
