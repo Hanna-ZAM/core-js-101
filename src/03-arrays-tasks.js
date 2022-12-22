@@ -35,17 +35,15 @@ function findElement(arr, value) {
  *    2 => [ 1, 3 ]
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
-function generateOdds(/* len */) {
-  throw new Error('Not implemented');
-  /* const arr = Array(len);
-  const arr1 = arr.map((num) => {
-    if (arr.indexOf(num) !== 0) {
-      num + 1 + 2 ** arr.indexOf(num);
-    } else {
-      num + 2 ** arr.indexOf(num);
-    }
-  });
-  return arr1; */
+function generateOdds(len) {
+  const arr = [];
+  if (len !== 0) {
+    arr[0] = 1;
+  }
+  while (arr.length < len) {
+    arr.push(arr[arr.length - 1] + 2);
+  }
+  return arr;
 }
 
 
@@ -61,8 +59,9 @@ function generateOdds(/* len */) {
  *    [0, 1, 2, 3, 4, 5] => [0, 1, 2, 3, 4, 5,   0, 1, 2, 3, 4, 5]
  *    [] => []
  */
-function doubleArray(/* arr */) {
-  throw new Error('Not implemented');
+function doubleArray(arr) {
+  const arr1 = [...arr, ...arr];
+  return arr1;
 }
 
 
@@ -212,8 +211,8 @@ function getTail(arr, n) {
  *    +'20,21,22,23,24\n'
  *    +'30,31,32,33,34'
  */
-function toCsvText(/* arr */) {
-  throw new Error('Not implemented');
+function toCsvText(arr) {
+  return arr.map((el) => `${el.join(',')}\n`).join('').slice(0, -1);
 }
 
 /**
@@ -271,8 +270,8 @@ function getMovingSum(arr) {
  * [ 'a', 'b', 'c' , null ]  => [ "b", null ]
  * [ "a" ] => []
  */
-function getSecondItems(/* arr */) {
-  throw new Error('Not implemented');
+function getSecondItems(arr) {
+  return arr.filter((el) => arr.indexOf(el) % 2 === 1);
 }
 
 
@@ -290,10 +289,18 @@ function getSecondItems(/* arr */) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
-}
+function propagateItemsByPositionIndex(arr) {
+  let arr1 = [];
+  arr.map((el) => {
+    const arr2 = new Array(arr.indexOf(el) + 1);
+    arr2.fill(el);
+    arr1 = [...arr1, ...arr2];
+    return arr1;
+  });
 
+
+  return arr1;
+}
 
 /**
  * Returns the 3 largest numbers from the specified array
@@ -308,8 +315,8 @@ function propagateItemsByPositionIndex(/* arr */) {
  *   [ 1,2,3,4,5,6,7,8,9,10 ] => [ 10, 9, 8 ]
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
-function get3TopItems(/* arr */) {
-  throw new Error('Not implemented');
+function get3TopItems(arr) {
+  return arr.slice(-3).reverse();
 }
 
 
@@ -481,8 +488,14 @@ function getIdentityMatrix(/* n */) {
  *     3, 3   => [ 3 ]
  *
  */
-function getIntervalArray(/* start, end */) {
-  throw new Error('Not implemented');
+function getIntervalArray(start, end) {
+  const arr = [];
+  let n = start;
+  while (n <= end) {
+    arr.push(n);
+    n += 1;
+  }
+  return arr;
 }
 
 /**
