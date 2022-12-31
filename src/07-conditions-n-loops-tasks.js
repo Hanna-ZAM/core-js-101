@@ -346,8 +346,18 @@ function isCreditCardNumber(ccn) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let result = num.toString().split('').reduce(
+    (accumulator, currentValue) => accumulator + +currentValue,
+    0,
+  );
+  while (result.toString().length > 1) {
+    result = result.toString().split('').reduce(
+      (accumulator, currentValue) => accumulator + +currentValue,
+      0,
+    );
+  }
+  return result;
 }
 
 
@@ -397,8 +407,15 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  let del = num;
+  const arr = [];
+  while (del > n - 1) {
+    arr.push(del % n);
+    del = Math.floor(del / n);
+  }
+
+  return del.toString() + arr.reverse().join('');
 }
 
 
@@ -414,8 +431,20 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const arr = [[], [], []];
+  const res = [];
+
+  for (let j = 0; j < pathes[0].length; j += 1) {
+    for (let i = 0; i < pathes.length; i += 1) {
+      if (pathes[i][j] === pathes[0][j]) {
+        arr[i].push(pathes[i][j]);
+      } else {
+        return res; /*= arr[0].slice(0, -1); */
+      }
+    }
+    return res.join('');
+  } return res.join('');
 }
 
 
@@ -472,8 +501,29 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  let result;
+  for (let i = 0; i < position.length; i += 1) {
+    if ((position[i][1] === position[i][0]) && (position[i][2] === position[i][0]) && ((position[i][0] === 'X') || (position[i][0] === '0'))) {
+      if (i === 0) { [[result]] = position; } else if (i === 1) {
+        [, [result]] = position;
+      } else if (i === 2) {
+        [, , [result]] = position;
+      }
+    }
+  }
+  for (let i = 0; i < position[0].length; i += 1) {
+    if ((position[1][i] === position[0][i]) && (position[2][i] === position[0][i]) && ((position[0][i] === 'X') || (position[0][i] === '0'))) {
+      result = position[0][i];
+    }
+  }
+  if ((position[1][1] === position[0][0]) && (position[2][2] === position[0][0]) && ((position[0][0] === 'X') || (position[0][0] === '0'))) {
+    [[result]] = position;
+  }
+  if ((position[1][1] === position[0][2]) && (position[2][0] === position[0][2]) && ((position[0][2] === 'X') || (position[0][2] === '0'))) {
+    [[, , result]] = position;
+  }
+  return result;
 }
 
 
