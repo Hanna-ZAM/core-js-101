@@ -27,8 +27,15 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  if ((num % 3 === 0) && (num % 5 === 0)) {
+    return 'FizzBuzz';
+  } if (num % 3 === 0) {
+    return 'Fizz';
+  } if (num % 5 === 0) {
+    return 'Buzz';
+  }
+  return num;
 }
 
 
@@ -43,10 +50,16 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  let result = 1;
+  let
+    i = 2;
+  while (i <= n) {
+    result *= i;
+    i += 1;
+  }
+  return result;
 }
-
 
 /**
  * Returns the sum of integer numbers between n1 and n2 (inclusive).
@@ -60,8 +73,14 @@ function getFactorial(/* n */) {
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
-function getSumBetweenNumbers(/* n1, n2 */) {
-  throw new Error('Not implemented');
+function getSumBetweenNumbers(n1, n2) {
+  let result = 0;
+  let i = n1;
+  while (i < n2 + 1) {
+    result += i;
+    i += 1;
+  }
+  return result;
 }
 
 
@@ -80,8 +99,8 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  return ((a + b > c) && (c + b > a) && (c + b > a) && (c + a > b));
 }
 
 
@@ -148,8 +167,16 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  const { x } = circle.center;
+  const { y } = circle.center;
+  const r = circle.radius;
+  const a = point.x;
+  const b = point.y;
+  if ((x - a) * (x - a) + (y - b) * (y - b) < r * r) {
+    return true;
+  }
+  return false;
 }
 
 
@@ -164,8 +191,24 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  const arr = str.split('');
+  const result = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    let count = 0;
+    for (let j = 0; j < str.length; j += 1) {
+      if (arr[i] === str[j]) {
+        count += 1;
+      }
+    }
+    if (count === 1) {
+      result.push(arr[i]);
+    }
+  }
+  if (arr[0]) {
+    return result[0];
+  }
+  return null;
 }
 
 
@@ -191,8 +234,24 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  let result = [];
+  if (isStartIncluded) {
+    result.push('[');
+  } else {
+    result.push('(');
+  }
+  if (a < b + 1) {
+    result = [...result, a, ', ', b];
+  } else {
+    result = [...result, b, ', ', a];
+  }
+  if (isEndIncluded) {
+    result.push(']');
+  } else {
+    result.push(')');
+  }
+  return result.join('');
 }
 
 
@@ -208,8 +267,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -225,8 +284,8 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return Number(num.toString().split('').reverse().join(''));
 }
 
 
@@ -250,9 +309,28 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const arr = ccn.toString().slice(0, -1).split('').reverse();
+  const arr1 = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    if (i % 2 === 0) {
+      arr[i] = +arr[i] * 2;
+      while (arr[i].toString().length > 1) {
+        arr[i] = arr[i].toString().split('').reduce(
+          (accumulator, currentValue) => accumulator + +currentValue,
+          0,
+        );
+      }
+    }
+    arr1.push(arr[i]);
+  }
+  const sum = arr1.reduce(
+    (accumulator, currentValue) => accumulator + +currentValue,
+    0,
+  );
+  return (ccn.toString().slice(-1) === ((1000 - sum) % 10).toString());
 }
+
 
 /**
  * Returns the digital root of integer:
