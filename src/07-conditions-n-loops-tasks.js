@@ -136,8 +136,27 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const xMin = rect1.left;
+  const xMax = rect1.left + rect1.width;
+  const yMin = rect1.top;
+  const yMax = rect1.top + rect1.height;
+  const p11 = (rect2.left > xMin - 1) && (rect2.left < xMax + 1);
+  const p12 = (rect2.top > yMin - 1) && (rect2.top < yMax + 1);
+  const p1 = p11 && p12;
+  const p21 = ((rect2.left + rect2.width) > xMin - 1) && ((rect2.left + rect2.width) < xMax + 1);
+  const p22 = (rect2.top > yMin - 1) && (rect2.top < yMax + 1);
+  const p2 = p21 && p22;
+  const p31 = ((rect2.left + rect2.width) > xMin - 1) && ((rect2.left + rect2.width) < xMax + 1);
+  const p32 = ((rect2.top + rect2.height) > yMin - 1) && ((rect2.top + rect2.height) < yMax + 1);
+  const p3 = p31 && p32;
+  const p41 = (rect2.left > xMin - 1) && (rect2.left < xMax + 1);
+  const p42 = ((rect2.top + rect2.height) > yMin - 1) && ((rect2.top + rect2.height) < yMax + 1);
+  const p4 = p41 && p42;
+  const p51 = ((rect2.left + rect2.width) > xMin - 1) && ((rect2.left + rect2.width) < xMax + 1);
+  const p52 = ((rect2.top) < yMin - 1) && ((rect2.top + rect2.height) > yMax + 1);
+  const p5 = p51 && p52;
+  return p1 || p2 || p3 || p4 || p5;
 }
 
 
@@ -381,9 +400,36 @@ function getDigitalRoot(num) {
  *   '[[][]][' => false
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
- */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+ */function isBracketsBalanced(str) {
+  const openBrackets = ['[', '{', '(', '<'];
+  const bracketsPair = {
+    ']': '[',
+    '}': '{',
+    ')': '(',
+    '>': '<',
+  };
+  const stack = [];
+
+  for (let i = 0; i < str.length; i += 1) {
+    const currentSymbol = str[i].toString();
+    const topElement = stack[stack.length - 1];
+
+    if (openBrackets.includes(currentSymbol)) {
+      stack.push(currentSymbol);
+    } else {
+      if (stack.length === 0) {
+        return false;
+      }
+
+      if (bracketsPair[currentSymbol] === topElement) {
+        stack.pop();
+      } else {
+        return false;
+      }
+    }
+  }
+
+  return stack.length === 0;
 }
 
 
@@ -432,19 +478,17 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-  const arr = [[], [], []];
-  const res = [];
-
-  for (let j = 0; j < pathes[0].length; j += 1) {
-    for (let i = 0; i < pathes.length; i += 1) {
-      if (pathes[i][j] === pathes[0][j]) {
-        arr[i].push(pathes[i][j]);
-      } else {
-        return res; /*= arr[0].slice(0, -1); */
-      }
-    }
-    return res.join('');
-  } return res.join('');
+  const arr = pathes.map((i) => i.split('/'));
+  const elAt = (i) => (a) => a[i];
+  const rotate = arr[0].map((e, i) => arr.map(elAt(i)));
+  const allElementsEqual = (array) => array.every((e) => e === array[0]);
+  let commonPath = rotate.filter(allElementsEqual).map((el) => el[0]).join('/');
+  if ((commonPath === '') && (!pathes.every((e) => e[0] === '/'))) {
+    commonPath = '';
+  } else {
+    commonPath += '/';
+  }
+  return commonPath;
 }
 
 
@@ -466,8 +510,24 @@ function getCommonDirectoryPath(pathes) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const A = m1;
+  const B = m2;
+  const rowsA = A.length;
+  const colsA = A[0].length;
+  const rowsB = B.length;
+  const colsB = B[0].length;
+  const C = [];
+  if (colsA !== rowsB) return false;
+  for (let i = 0; i < rowsA; i += 1) C[i] = [];
+  for (let k = 0; k < colsB; k += 1) {
+    for (let i = 0; i < rowsA; i += 1) {
+      let t = 0;
+      for (let j = 0; j < rowsB; j += 1) t += A[i][j] * B[j][k];
+      C[i][k] = t;
+    }
+  }
+  return C;
 }
 
 
