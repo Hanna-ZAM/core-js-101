@@ -448,8 +448,26 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    const nameA = a.country.toUpperCase();
+    const nameB = b.country.toUpperCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    const cityA = a.city.toUpperCase();
+    const cityB = b.city.toUpperCase();
+    if (cityA < cityB) {
+      return -1;
+    }
+    if (cityA > cityB) {
+      return 1;
+    }
+    return 0;
+  });
 }
 
 /**
@@ -490,13 +508,7 @@ function getIdentityMatrix(n) {
  *
  */
 function getIntervalArray(start, end) {
-  const arr = [];
-  let n = start;
-  while (n <= end) {
-    arr.push(n);
-    n += 1;
-  }
-  return arr;
+  return Array(end - start + 1).fill().map((_, idx) => start + idx);
 }
 
 /**
@@ -556,12 +568,13 @@ function distinct(arr) {
  */
 function group(array, keySelector, valueSelector) {
   const result = new Map();
-
-  for (let k, i = 0; i < array.length; i += 1) {
-    k = keySelector(array[i]);
+  let k;
+  array.map((el, i) => {
+    k = keySelector(el);
     if (result.has(k)) result.get(k).push(valueSelector(array[i]));
     else result.set(k, [valueSelector(array[i])]);
-  }
+    return result;
+  });
   return result;
 }
 
