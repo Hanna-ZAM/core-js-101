@@ -56,7 +56,8 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-  JSON.parse(json, proto);
+  const obj = JSON.parse(json);
+  return Object.setPrototypeOf(obj, proto);
 }
 
 
@@ -113,41 +114,105 @@ function fromJSON(proto, json) {
  *
  *  For more examples see unit tests.
  */
+class MySuperBaseElementSelector {
+  constructor() {
+    this.selectors = [];
+    this.combinedResult = '';
+    this.error = {
+      err1:
+        'Element, id and pseudo-element should not occur more then one time inside the selector',
+      err2:
+        'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element',
+    };
+  }
+
+  element(value) {
+    if (this.selectors[0]) throw Error(this.error.err1);
+    if (this.selectors[1]) throw Error(this.error.err2);
+    this.selectors[0] = value;
+    return this;
+  }
+
+  id(value) {
+    if (this.selectors[1]) throw Error(this.error.err1);
+    if (this.selectors[2] || this.selectors[5]) throw Error(this.error.err2);
+    this.selectors[1] = `#${value}`;
+    return this;
+  }
+
+  class(value) {
+    if (this.selectors[3]) throw Error(this.error.err2);
+    if (!this.selectors[2]) {
+      this.selectors[2] = `.${value}`;
+    } else {
+      this.selectors[2] += `.${value}`;
+    }
+    return this;
+  }
+
+  attr(value) {
+    if (this.selectors[4]) throw Error(this.error.err2);
+    this.selectors[3] = `[${value}]`;
+    return this;
+  }
+
+  pseudoClass(value) {
+    if (this.selectors[5]) throw Error(this.error.err2);
+    if (!this.selectors[4]) {
+      this.selectors[4] = `:${value}`;
+    } else {
+      this.selectors[4] += `:${value}`;
+    }
+    return this;
+  }
+
+  pseudoElement(value) {
+    if (this.selectors[5]) throw Error(this.error.err1);
+    this.selectors[5] = `::${value}`;
+    return this;
+  }
+
+  combine(selector1, combinator, selector2) {
+    this.combinedResult = `${selector1} ${combinator} ${selector2}`;
+    return this;
+  }
+
+  stringify() {
+    if (this.combinedResult !== '') return this.combinedResult;
+    return this.selectors.join('');
+  }
+}
 
 const cssSelectorBuilder = {
   element(value) {
-    this.element = value;
-    return this;
+    return new MySuperBaseElementSelector().element(value);
   },
 
   id(value) {
-    this.id = `#${value}`;
-    return this;
+    return new MySuperBaseElementSelector().id(value);
   },
 
   class(value) {
-    this.class = `.${value}`;
-    return this;
+    return new MySuperBaseElementSelector().class(value);
   },
 
   attr(value) {
-    this.attr = `[${value}]`;
-    return this;
+    return new MySuperBaseElementSelector().attr(value);
   },
 
   pseudoClass(value) {
-    this.pseudoClass = `:${value}`;
-    return this;
+    return new MySuperBaseElementSelector().pseudoClass(value);
   },
 
   pseudoElement(value) {
-    this.pseudoElement = `::${value}`;
-    return this;
+    return new MySuperBaseElementSelector().pseudoElement(value);
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    return new MySuperBaseElementSelector()
+      .combine(selector1.stringify(), combinator, selector2.stringify());
   },
+
 };
 
 
